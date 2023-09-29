@@ -1,0 +1,51 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<script src="../DB_sql.js"></script>
+	    <script src="../jQuery.js"></script>
+	    <link rel="stylesheet" href="work_p_management.css">
+	    <title>勤務先管理</title>
+	</head>
+	
+	<body>
+		<div id="gamen">
+			
+			<!-- タイトル-->
+	  		<h1>勤務先管理</h1>
+	  		
+	  		<!-- 勤務先テーブル-->
+	  		<div>
+		  		<table  class="listScroll" id = "location_table" border="3" style="border-collapse: collapse">
+				    <tr>
+				      <th>勤務先ID</th>
+				      <th>勤務先</th>
+				    </tr>
+				</table>
+			</div>
+			
+			
+
+			<!-- 勤務先ID-->
+			<div class="kinmu1">
+				<div>勤務先ID
+	  			<input type="text" id = "id_form" size="40" style="height: 50px; name="勤務先ID">
+	  			</div>
+	  		</div>
+	  		
+	  		<!-- 勤務先-->
+	  		<div class="kinmu2">	
+	  			<div>勤務先
+	  			<input type="text" id = "name_form" size="40" style="height: 50px; name="勤務先">
+	  			</div>
+	  		</div>
+	  		
+
+ 
+				<!-- ボタン-->
+		  		<div><button class="botan1" id ="back">戻る</button></div><!-- 戻るボタン-->
+		  		<div><button class="botan2" id ="add">登録</button></div><!-- 登録ボタン-->
+		  		<div><button class="botan3" id ="change">更新</button></div><!-- 更新ボタン-->
+		</div>
+		<script src="work_p_management.js"></script>
+	</body>
+</html>

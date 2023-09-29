@@ -1,0 +1,101 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<script src="../DB_sql.js"></script>
+		<script src="../jQuery.js"></script>
+	    <link rel="stylesheet" href="em_workplace.css">
+	    <title>社員勤務先</title>
+	</head>
+	
+	<body>
+		<div id="gamen">
+			
+			<!-- タイトル-->
+	  		<h1>社員勤務先</h1>
+	  		
+	  		<!-- 社員テーブル-->
+	  		<div>
+		  		<table  class="listScroll" id = "table" border="3" style="border-collapse: collapse">
+				    <tr>
+				      <th>社員番号</th>
+				      <th>社員名</th>
+				      <th>勤務先</th>
+				      <th>契約形態</th>
+				      <th>始業</th>
+				      <th>終業</th>
+				      <th>勤務時間</th>
+				      <th>残業開始</th>
+				      <th>交通費</th>
+				      <th>備考</th>
+				    </tr>
+				    
+
+				</table>
+			</div>
+			
+
+	
+		<p class="syainb">社員番号</p>
+		<!-- 社員番号の選択-->
+    	<select name="syainnumber" id= "staff_id_select"></select>
+
+		<p class="kinmusaki">勤務先ID</p>
+		<!-- 勤務先IDの選択-->
+    	<select name="kinmu" id ="location_name_select"></select>
+
+		<p class="kei">契約形態</p>
+		<!-- 契約形態の選択-->
+    	<select name="keiyaku" id = "agreement_select"></select>
+    	  	
+	  		<!-- 始業時間-->
+	  		<div class="starttime">始業時間
+	  			<input type="text" id = "start_time" size="15" style="height: 30px; name="始業時間" maxlength="5">
+	  		</div>	  		
+	  			  		
+	  		<!-- 終業時間-->
+	  		<div class="closingtime">終業時間
+	  			<input type="text" id = "end_time" size="15" style="height: 30px; name="終業時間" maxlength="5">
+	  		</div>
+	  		
+	  		<!-- 勤務時間-->
+	  		<div class="workgtime">勤務時間
+	  			<input type="text"  id = "work_time" size="15" style="height: 30px; name="勤務時間" maxlength="5">
+	  		</div>	  		
+
+	  		<!-- 残業開始時間-->
+	  		<div class="overtime">残業開始
+	  			<input type="text" id = "over_time" size="15" style="height: 30px; name="残業開始時間" maxlength="5">
+	  		</div>	  
+
+	  		<!-- 交通費-->
+	  		<div class="tmoney">交通費
+	  			<input type="text" id = "road_money" size="15" style="height: 30px; name="交通費">
+	  			</div>
+	  		</div>	  
+
+	  		<!-- 備考-->
+	  		<div class="biko">備考
+	  			<input type="text" id ="note" size="30" style="height: 60px; name="備考">
+	  		</div>	
+
+	  		
+	  		<!-- 削除済みのみ表示-->
+	  		<div class="flag1">
+	  			<input type="checkbox" id = "del_flg_show" name="削除済みのみ表示" value="true">
+		  		<label for="delete-flag1">削除済みのみ表示</label>
+	  		</div>
+	  		
+	  		<!-- 削除フラグ-->
+	  		<div class="flag2">
+		  		<label for="delete-flag2">削除フラグ</label>
+		  		<input type="checkbox" id = "del_flg" name="削除フラグ" value="true">
+	  		</div>
+ 
+				<!-- ボタン-->
+		  		<div><button class="botan1" id = "back">戻る</button></div><!-- 戻るボタン-->
+		  		<div><button class="botan2" id ="add_button" >登録</button></div><!-- 登録ボタン-->
+		  		<div><button class="botan3" id ="change_button">更新</button></div><!-- 更新ボタン-->
+		</div>
+		<script src="em_workplace.js"></script>
+	</body>
+</html>

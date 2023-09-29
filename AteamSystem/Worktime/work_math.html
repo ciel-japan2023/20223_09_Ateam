@@ -1,0 +1,835 @@
+<html>ref
+<head>
+	<meta charset="UTF-8">
+	<script src="../jQuery.js"></script>
+	<link rel="stylesheet" href="../style_v1.css">
+	<script src="../DB_sql.js"></script>
+</head>
+<body>
+	<div>
+		<button class="button_back" id="BACK_button">戻る</button>
+		<div class="f">
+			<div class="m" style="margin:40 0 0 25 ">社員</div>
+			<select class="input" style="margin:40 0 0 0 " id="staff_select"><option selected hidden>選択してください</option></select>
+			<h2 id = "title_month" style="margin:10 0 0 90  ;font-size: 40px" ></h2>   <!--年月選択画面で取得した月を表示-->
+			<h2 style="font-size: 40px; margin: 10px 0; padding: 0 5px;">月勤務時間計算画面</h2>
+		</div>
+		<div class="f">
+			<div class="m">交通費</div>
+			<input class="input" id="road_money_input" type="text"disabled>
+		
+		
+			<div class="m">備考</div>
+			<input class="input" id="note_input" type="text"disabled>
+		</div>
+			<button class="button" id="ALL_button">一括</button>
+		
+	</div>
+	<br>
+	<table border="1" id="staff_time">
+		<tr class="table_bar1"><th rowspan="3"colspan="2">日付</th>
+			<th rowspan="3">作業内容</th>
+			<th rowspan="2" colspan="4">作業時間内訳</th>
+			<th colspan="4">時間外労働内訳</th>
+			<th rowspan="2" colspan="3">時間内訳</th>
+			<th rowspan="2" colspan="2">休暇</th>
+			<th rowspan="2" colspan="2">控除</th>
+		</tr>
+		<tr class="table_bar2">
+			<th colspan="2">平日・土曜日</th><th colspan="2">法定休日</th>
+		</tr>
+		<tr class="table_bar3">
+			<th>出勤</th><th>退勤</th>
+			<th>休憩</th>
+			<th>総時間</th>
+			<th>通常</th>
+			<th>深夜</th>
+			<th>通常</th>
+			<th>深夜</th>
+			<th>自社</th>
+			<th>客先</th>
+			<th>休暇(任意)</th>
+			<th>時間</th>
+			<th>種別</th>
+			<th>遅刻</th>
+			<th>早退</th>
+		</tr>
+		<!--ここにデータをappendで挿入-->
+	</table>
+	<div class="f">
+		<div>◆作業時間一覧</div>
+		<div>◆時間外作業一覧</div>
+	</div>
+	
+	<div class="f">
+		<table border="1">
+			<tr><th>客先時間</th><td id="sum_k_time" style="background-color:#d3d3d3;">0:00</td></tr>
+			<tr><th>自社時間</th><td id="sum_j_time" style="background-color:#d3d3d3;">0:00</td></tr>
+		</table>
+		<table border="1">
+			<tr>
+				<th>平日・土曜日60h以下</th>
+				<td id="sum_ov_60down" style="background-color:#d3d3d3;">0:00</td>
+				<th>法定休日作業</th>
+				<td id="sum_h_all" style="background-color:#d3d3d3;">0:00</td>
+			</tr>
+			<tr>
+				<th>平日・土曜日60h超過</th>
+				<td id="sum_ov_60up" style="background-color:#d3d3d3;">0:00</td>
+				<th>時間外作業総時間</th>
+				<td id="sum_ov_all" style="background-color:#d3d3d3;">0:00</td>
+			</tr>
+		</table>
+		<button id="MATH_button">計算</button>
+		<button class="button_memory" id="MEMORY_button">保存</button>
+	</div>
+	
+	<!--ポップアップ時のグレー処理-->
+	<div id="pop_back"></div>
+	
+	<!--一括入力ポップアップ-->
+	<div class="pop" id="ALL">
+		<button class="pop_cancel" id="ALL_close">✖</button>
+		<div class="pop_title">一括入力</div>
+		<div class="pop_input_group">
+			<label>出勤時間</label>
+			<input class="pop_input" id="ALL_start" type="time">
+		</div>
+		<div class="pop_input_group">
+			<label>退勤時間</label>
+			<input class="pop_input" id="ALL_finish" type="time">
+		</div>
+		<div class="pop_button_group">
+			<button class="pop_button" id="customer_button" style="background-color: #FFD700;">客先</button>
+			<button class="pop_button" id="commpany_button" style="background-color: #87CEEB;">自社</button>
+		</div>
+	</div>
+	
+		<!--保存確認ポップアップ-->
+	<div class="pop" id="MEMORY">
+		<button class="pop_cancel" id="MEMORY_close">✖</button>
+		<div class="pop_title_alone">保存しますか？</div>
+		<button class="pop_button_alone" id="MEMORY_OK">OK</button>
+	</div>
+	
+	<!--戻る確認ポップアップ-->
+	<div class="pop" id="BACK">
+		<button class="pop_cancel" id="BACK_close">✖</button>
+		<div class="pop_title_memorycheck">
+			<span style="color: red;">※保存していないため<br>入力されたデータが消えます<br></span>よろしいですか？
+		</div>
+		<button class="pop_button_alone" id="BACK_OK">OK</button>
+	</div>
+</body>
+<script>
+
+let check = 0;
+let select_check = false;
+	//ブラウザのバックボタン押下時の警告メッセージ
+	window.addEventListener('load', function() {
+	  window.addEventListener('popstate', function(event) {
+	    alert('もう一度このボタンを押すと保存していないデータは消えてしまいます😱');
+	  });
+	  history.pushState(null, null, null);
+	});
+	
+
+	
+	//ポップアップのhide処理
+	$("#ALL").hide();
+	$("#MEMORY").hide();
+	$("#BACK").hide();
+	$("#pop_back").hide();
+	
+	//年月選択画面から変数を取得
+	 let cash_year = localStorage.getItem("year");
+	 let cash_month = localStorage.getItem("month");
+	
+	let year = cash_year;
+	let month = cash_month;
+	if(month.length==1){
+		month = "0"+month;
+	}
+	
+     //タイトルの頭に月を追加
+      $("#title_month").append(cash_month);
+     	 
+	//DBからデータを取得
+	let sql_select_day = 'select * from TP_Calendar where date LIKE "'+year+'-'+month+'%"';
+	let DBsql_select_day = DB.sql(sql_select_day);
+	
+	let sql_select_time = 'select * from TE_Time where date LIKE "'+year+'-'+month+'%"';
+	let DBsql_select_time = DB.sql(sql_select_time);
+	
+	let sql_select_staff_name = 'select staff_id,staff_name from TM_Staff where del_flg="0"';
+	let DBsql_select_staff_name = DB.sql(sql_select_staff_name);
+	
+	let DBsql_holiday_type = DB.sql("select * from TC_HolidayType");
+	
+	let DBsql_time = DB.sql("select staff_id,date from TE_Time");
+	
+	let DBsql_table_column = DB.sql("desc TE_Time");
+
+	//社員プルダウンにデータを挿入
+	for(i=0;i<DBsql_select_staff_name.length;i++){
+		$("#staff_select").append('<option id="staff_select'+i+'"></option>');
+		$("#staff_select"+i).text(DBsql_select_staff_name[i]["staff_id"]+"："+DBsql_select_staff_name[i]["staff_name"]);
+	};
+	
+	//プルダウン選択時
+	$("#staff_select").on("change",function(){
+		select_check = true;
+		let DB_name = $(this).children(':selected').text();
+		let name = DB_name.slice(7,40);
+		let name_id_slice = DB_name.slice(0,6);
+		let sql_select_time = 'select staff_name,work_content,start_time,end_time,break_time,overtime_normal,overtime_night,overtime_nosat,overtime_nosat_night,private_time,customer_time,break_time_any,holiday_time,holiday_type,slow,early from TE_Time join TM_Staff on TE_Time.staff_id=TM_Staff.staff_id where date LIKE "'+year+'-'+month+'%"AND staff_name LIKE "'+name+'" ';
+		let DBsql_select_time = DB.sql(sql_select_time);
+		let sql_road_money = 'select road_money,note from TE_Staff_Location where staff_id="'+name_id_slice+'" AND del_flg = "0" ';
+		console.log(sql_road_money)
+		let DBsql_road_money = DB.sql(sql_road_money);
+		console.log(DBsql_road_money);
+		
+		if(DBsql_road_money.length>0){
+			if(DBsql_road_money.length>1){
+				$("#road_money_input").val("二件以上データがあります");
+				
+			}else{
+				$("#road_money_input").val(DBsql_road_money[0]["road_money"]);
+				$("#note_input").val(DBsql_road_money[0]["note"]);
+			}
+		}else{
+			$("#road_money_input").val("-");
+			$("#note_input").val("-");
+		}
+		
+		//DBのデータを入れる用の変数と初期化
+		var memory = new Array(DBsql_select_time.length);
+		for(i=0;i<DBsql_select_time.length;i++){
+			memory[i] = new Array(16);
+			for(j=0;j<16;j++){
+				memory[i][j] = "00:00";
+				if(j==0){
+					memory[i][j] = "-";
+				}
+				if(j==13){
+					memory[i][j] = "-";
+				}
+			}
+		}
+		for(i=0;i<memory.length;i++){
+			memory[i][0] = DBsql_select_time[i]["work_content"];
+			let db_slice = DBsql_select_time[i]["start_time"];
+			memory[i][1] = db_slice.slice(0,5);
+			db_slice = DBsql_select_time[i]["end_time"];
+			memory[i][2] = db_slice.slice(0,5);
+			db_slice = DBsql_select_time[i]["break_time"];
+			memory[i][3] = db_slice.slice(0,5);
+			db_slice = DBsql_select_time[i]["overtime_normal"];
+			memory[i][5] = db_slice.slice(0,5);
+			db_slice = DBsql_select_time[i]["overtime_night"];
+			memory[i][6] = db_slice.slice(0,5);
+			db_slice = DBsql_select_time[i]["overtime_nosat"];
+			memory[i][7] = db_slice.slice(0,5);
+			db_slice = DBsql_select_time[i]["overtime_nosat_night"];
+			memory[i][8] = db_slice.slice(0,5);
+			db_slice = DBsql_select_time[i]["private_time"];
+			memory[i][9] = db_slice.slice(0,5);
+			db_slice = DBsql_select_time[i]["customer_time"];
+			memory[i][10] = db_slice.slice(0,5);
+			db_slice = DBsql_select_time[i]["break_time_any"];
+			memory[i][11] = db_slice.slice(0,5);
+			db_slice = DBsql_select_time[i]["holiday_time"];
+			memory[i][12] = db_slice.slice(0,5);
+			memory[i][13] = DBsql_select_time[i]["holiday_type"];
+			db_slice = DBsql_select_time[i]["slow"];
+			memory[i][14] = db_slice.slice(0,5);
+			db_slice = DBsql_select_time[i]["early"];
+			memory[i][15] = db_slice.slice(0,5);
+		}
+		
+		//データベースのデータをappendで入れ込む
+		for(i=0;i<calendar_day.length;i++){
+			if(check==0){
+				$("#staff_time").append('<tr id="staff_row'+i+'"></tr>');
+				$("#staff_row"+i).append('<td id="staff_day'+i+'" style="background-color:#d3d3d3;"></td>');
+				$("#staff_row"+i).append('<td id="staff_week'+i+'" style="background-color:#d3d3d3;"></td>');
+			}
+			$("#staff_day"+i).text(calendar_day[i][1]);
+			$("#staff_week"+i).text(calendar_day[i][2]);
+			for(j=0;j<16;j++){
+				if(check==0){
+					if(j!=4&&j!=13){
+						$("#staff_row"+i).append('<td><input id="staff_data'+i+'_'+j+'" type="text"></td>');
+					}else if(j==4){
+						$("#staff_row"+i).append('<td><input id="staff_data'+i+'_'+j+'" type="text" disabled></td>');
+					}else if(j==13){
+						$("#staff_row"+i).append('<td><select id="staff_data'+i+'_'+j+'" ><option id="holiday_type'+i+'99" selected style="display:inlin;text-align:center;">-</option></select></td>');
+						for(k=0;k<DBsql_holiday_type.length;k++){
+							if(DBsql_holiday_type[k]["holiday_type_name"]!="-"){
+								$("#staff_data"+i+"_"+j).append('<option id="holiday_type'+i+''+DBsql_holiday_type[k]["holiday_type"]+'"></option>');
+								$("#holiday_type"+i+DBsql_holiday_type[k]["holiday_type"]).text(DBsql_holiday_type[k]["holiday_type_name"]);
+							}
+						}
+					}
+				}
+				if(j!=0&&j!=13){
+					$("#staff_data"+i+"_"+j).val("00:00");
+				}
+				if(j==13){
+					$("#holiday_type"+i+"99").prop("selected", true); 
+				}
+				if(j==0){
+					$("#staff_data"+i+"_"+j).val("-");
+				}
+				if(j!=0){
+					$("#staff_data"+i+"_"+j).css('width','50');
+				}
+			}
+			$("#staff_data"+i+"_0").val("-");
+			$("#staff_data"+i+"_0").css('background-color','yellow');
+			$("#staff_data"+i+"_1").css('background-color','yellow');
+			$("#staff_data"+i+"_2").css('background-color','yellow');
+			$("#staff_data"+i+"_4").css('background-color','#d3d3d3');
+			$("#staff_data"+i+"_9").css('background-color','yellow');
+			$("#staff_data"+i+"_10").css('background-color','yellow');
+			if(DBsql_select_day[i]["wday"]=="土"){
+				$("#staff_data"+i+"_0").css('background-color','white');
+				$("#staff_data"+i+"_1").css('background-color','white');
+				$("#staff_data"+i+"_2").css('background-color','white');
+				$("#staff_data"+i+"_9").css('background-color','white');
+				$("#staff_data"+i+"_10").css('background-color','white');
+				$("#staff_day"+i).css('background-color','blue');
+				$("#staff_week"+i).css('background-color','blue');
+			}else if(DBsql_select_day[i]["holiday_flg"]==1){
+				$("#staff_data"+i+"_0").css('background-color','white');
+				$("#staff_data"+i+"_1").css('background-color','white');
+				$("#staff_data"+i+"_2").css('background-color','white');
+				$("#staff_data"+i+"_9").css('background-color','white');
+				$("#staff_data"+i+"_10").css('background-color','white');
+				$("#staff_day"+i).css('background-color','red');
+				$("#staff_week"+i).css('background-color','red');
+			}else if(DBsql_select_day[i]["wday"]=="日"){
+				$("#staff_data"+i+"_0").css('background-color','white');
+				$("#staff_data"+i+"_1").css('background-color','white');
+				$("#staff_data"+i+"_2").css('background-color','white');
+				$("#staff_data"+i+"_9").css('background-color','white');
+				$("#staff_data"+i+"_10").css('background-color','white');
+				$("#staff_day"+i).css('background-color','red');
+				$("#staff_week"+i).css('background-color','red');
+			}
+		}
+		//DBのデータをテーブルに挿入
+		for(i=0;i<memory.length;i++){
+			for(j=0;j<16;j++){
+				if(j!=13){
+					$("#staff_data"+i+"_"+j).val(memory[i][j]);
+				}else{
+					$("#holiday_type"+i+memory[i][j]).prop("selected", true); 
+				}
+			}
+		}
+		if(check==0){
+		//総合計をappendで入れ込む
+		$("#staff_time").append('<tr class="table_bar4"><th colspan="6">総時間</th>'+
+								'<td id="sum_all"style="width:50;font-size:13;background-color:#d3d3d3;">00:00</td>'+
+								'<td id="sum_ovt_n" style="width:50;font-size:13;background-color:#d3d3d3;">00:00</td>'+
+								'<td id="sum_ovt_e" style="width:50;font-size:13;background-color:#d3d3d3;">00:00</td>'+
+								'<td id="sum_ovt_h_n" style="width:50;font-size:13;background-color:#d3d3d3;">00:00</td>'+
+								'<td id="sum_ovt_h_e" style="width:50;font-size:13;background-color:#d3d3d3;">00:00</td>'+
+								'<td id="sum_commpany" style="width:50;font-size:13;background-color:#d3d3d3;">00:00</td>'+
+								'<td id="sum_customer" style="width:50;font-size:13;background-color:#d3d3d3;">00:00</td>'+
+								'<td id="sum_break" style="width:50;font-size:13;background-color:#d3d3d3;">00:00</td>'+
+								'<td id="sum_h_time" style="width:50;font-size:13;background-color:#d3d3d3;">00:00</td>'+
+								'<td style="text-align: center;background-color:#d3d3d3;">／</td>'+
+								'<td id="sum_slow"  style="width:50;font-size:13;background-color:#d3d3d3;">00:00</td>'+
+								'<td id="sum_early" style="width:50;font-size:13;background-color:#d3d3d3;">00:00</td></tr>');
+		}
+		check++;
+	});
+	
+	//テーブルの日付と曜日を配列に格納
+	var calendar_day = new Array (DBsql_select_day.length);
+	for(i=0;i<calendar_day.length;i++){
+		calendar_day[i] = new Array(2);
+		let day = DBsql_select_day[i]["date"];
+		calendar_day[i][1] = day.slice(8,10);
+		calendar_day[i][2] = DBsql_select_day[i]["wday"];
+	}
+	
+	//エラー時の処理
+	var error_check = new Array(calendar_day);
+	for(i=0;i<calendar_day.length;i++){
+		error_check[i] = new Array(16);
+		for(j=0;j<16;j++){
+			error_check[i][j] = false;
+		}
+	}
+
+	//テーブルにデータ入力時
+//	$("input").on("input", function() {
+//		apdate_sum();
+//	});
+	
+	//計算ボタン押下時
+	$("#MATH_button").on("click",function(){
+		if(select_check){
+			for(i=0;i<calendar_day.length;i++){
+				for(j=0;j<16;j++){
+					error_check[i][j] = false;
+				}
+			}
+			apdate_sum();
+		}else{
+			alert("社員を選択してください");
+		}
+	});
+	
+	//一括ボタン押下時
+	$("#ALL_button").on("click",function(){
+		if(select_check){
+			$("#ALL").show();
+			$("#pop_back").show();
+		}else{
+			alert("社員を選択してください");
+		}
+	})
+	
+	//一括入力ポップアップ
+	//一括入力閉じるボタン押下時
+	$("#ALL_close").on("click",function(){
+		$("#ALL").hide();
+		$("#pop_back").hide();
+	})
+	
+	//一括入力客先ボタン押下時
+	$("#customer_button").on("click",function(){
+		let ALL_start = $("#ALL_start").val();
+		let ALL_finish = $("#ALL_finish").val();
+		let time_start = time(ALL_start);
+		let time_finish = time(ALL_finish);
+		let time_h = Math.floor((time_finish - time_start)/60);
+		let time_m = (time_finish - time_start)%60;
+		let ALL_time = "";
+		ALL_time = zero(time_h,time_m,time_finish,time_start);
+		for(i=0;i<calendar_day.length;i++){
+			$("#staff_data"+i+"_1").val(ALL_start);
+			$("#staff_data"+i+"_2").val(ALL_finish);
+			$("#staff_data"+i+"_9").val("00:00");
+			$("#staff_data"+i+"_10").val(ALL_time);
+		}
+		$("#ALL").hide();
+		$("#pop_back").hide();
+		apdate_sum();
+	})
+	
+	//一括入力自社ボタン押下時
+	$("#commpany_button").on("click",function(){
+		let ALL_start = $("#ALL_start").val();
+		let ALL_finish = $("#ALL_finish").val();
+		let time_start = time(ALL_start);
+		let time_finish = time(ALL_finish);
+		let time_h = Math.floor((time_finish - time_start)/60);
+		let time_m = (time_finish - time_start)%60;
+		let ALL_time = "";
+		ALL_time = zero(time_h,time_m,time_finish,time_start);
+		for(i=0;i<calendar_day.length;i++){
+			$("#staff_data"+i+"_1").val(ALL_start);
+			$("#staff_data"+i+"_2").val(ALL_finish);
+			$("#staff_data"+i+"_9").val(ALL_time);
+			$("#staff_data"+i+"_10").val("00:00");
+		}
+		$("#ALL").hide();
+		$("#pop_back").hide();
+		apdate_sum();
+	})
+	
+	//戻るボタン押下時
+	$("#BACK_button").on("click",function(){
+		$("#BACK").show();
+		$("#pop_back").show();
+	})
+	
+	//戻る確認ポップアップ閉じるボタン押下時
+	$("#BACK_close").on("click",function(){
+		$("#BACK").hide();
+		$("#pop_back").hide();
+	})
+
+	//戻る確認ポップアップ閉じるボタン押下時
+	$("#BACK_OK").on("click",function(){
+		$("#BACK").hide();
+		$("#pop_back").hide();
+		// 選択画面へ
+		location.href = "../Date_Selection/ym_selet.html";
+	})
+
+	
+	//保存ボタン押下時
+	$("#MEMORY_button").on("click",function(){
+		if(select_check){
+			$("#MEMORY").show();
+			$("#pop_back").show();
+		}else{
+			alert("社員を選択してください");
+		}
+	})
+	
+	//保存確認閉じるボタン押下時
+	$("#MEMORY_close").on("click",function(){
+		$("#MEMORY").hide();
+		$("#pop_back").hide();
+	})
+	
+	//保存確認OKボタン押下時
+	$("#MEMORY_OK").on("click",function(){
+		DBsql_time = DB.sql("select staff_id,date from TE_Time");
+		let save = new Array(calendar_day.length);
+		let day = 0;
+		for(i=0;i<calendar_day.length;i++){
+			day++;
+			save[i] = new Array(17);
+			let name = $("#staff_select").children(':selected').text();
+			save[i][0] = name.slice(0,6);
+			if(i<9){
+				save[i][1] = year+"-"+month+"-0"+day;
+			}else{
+				save[i][1] = year+"-"+month+"-"+day;
+			}
+			save[i][2] = $("#staff_data"+i+"_0").val();
+			save[i][3] = $("#staff_data"+i+"_1").val();
+			save[i][4] = $("#staff_data"+i+"_2").val();
+			save[i][5] = $("#staff_data"+i+"_3").val();
+			save[i][6] = $("#staff_data"+i+"_5").val();
+			save[i][7] = $("#staff_data"+i+"_6").val();
+			save[i][8] = $("#staff_data"+i+"_7").val();
+			save[i][9] = $("#staff_data"+i+"_8").val();
+			save[i][10] = $("#staff_data"+i+"_9").val();
+			save[i][11] = $("#staff_data"+i+"_10").val();
+			save[i][12] = $("#staff_data"+i+"_11").val();
+			save[i][13] = $("#staff_data"+i+"_12").val();
+			let holidaytype = $("#staff_data"+i+"_13").children(':selected').text();
+			for(j=0;j<DBsql_holiday_type.length;j++){
+					if(holidaytype==DBsql_holiday_type[j]["holiday_type_name"]){
+						save[i][14] = DBsql_holiday_type[j]["holiday_type"];
+					}
+			}
+			save[i][15] = $("#staff_data"+i+"_14").val();
+			save[i][16] = $("#staff_data"+i+"_15").val();
+		}
+		for(i=0;i<save.length;i++){
+			let update_check = false;
+			for(j=0;j<DBsql_time.length;j++){
+				if(save[i][0]==DBsql_time[j]["staff_id"]&&save[i][1]==DBsql_time[j]["date"]){
+					update_check=true;
+				}
+			}
+			if(update_check){
+				
+				let sql_update = "UPDATE TE_Time SET "
+				for(k=2;k<17;k++){
+					if(k==2){
+						sql_update += DBsql_table_column[k]["Field"] + ' = "' + save[i][k] + '"'
+					}else{
+						sql_update += ',' + DBsql_table_column[k]["Field"] + ' = "' + save[i][k] + '"'
+					}
+				}
+				sql_update += ' where staff_id = "'+save[i][0]+'" AND date = "'+save[i][1]+'";'
+				console.log(sql_update)
+				DB.sql(sql_update);
+			}else{
+				let sql_insert = "INSERT INTO TE_Time VALUE ("
+				for(k=0;k<17;k++){
+					if(k==0){
+						sql_insert += '"' + save[i][k] + '"'
+					}else{
+						sql_insert += ',"' + save[i][k] + '"'
+					}
+				}
+				sql_insert += ');'
+				console.log(sql_insert)
+				DB.sql(sql_insert);
+			}
+		}
+		$("#MEMORY").hide();
+		$("#pop_back").hide();
+	})
+	
+	
+//-------------------------------------ここからfunctionだよ----------------------------------------------------------------------------------
+	
+	
+	//time型のhh:mmのhhを取り出してint型に変換
+	function time(time){
+		//時間の計算
+		let time_h;
+		if(time.length == 5){
+			time_h = time.slice(0,2);
+		}else if(time.length == 4){
+			time_h = time.slice(0,1);
+		}
+			time_h = time_h * 60;
+		let time_h_trans = parseInt(time_h)
+		//分の計算
+		let time_m;
+		if(time.length == 5){
+			time_m = time.slice(3,5);
+		}else if(time.length == 4){
+			time_m = time.slice(2,4);
+		}
+		let time_m_trans = parseInt(time_m)
+		
+		let time_sum = time_m_trans + time_h_trans;
+		
+		return time_sum;
+	}
+	
+	//time型からの変換後の0埋め
+	function zero(time_h,time_m,time_finish,time_start){
+		let time;
+		if(time_h.toString().length==1){
+			time = "0"+time_h+":"+time_m;
+		}
+		if(time_m.toString().length==1){
+			time = time_h+":0"+time_m;
+		}
+		if(time_h.toString().length==1&&time_m.toString().length==1){
+			time = "0"+time_h+":0"+time_m;
+		}
+		if(time_h.toString().length==2&&time_m.toString().length==2){
+			time = time_h+":"+time_m;
+		}
+		if(time_finish - time_start<0){
+			time = "error";
+		}
+		return time;
+	}
+	
+	//出勤時間と退勤時間の入力内容をもとに総時間を自動計算
+	function apdate_sum(){
+		for(i=0;i<calendar_day.length;i++){
+			let start_time = $("#staff_data"+i+"_1").val();
+			let finish_time = $("#staff_data"+i+"_2").val();
+			let break_time = $("#staff_data"+i+"_3").val();
+			start_time = time(start_time);
+			finish_time = time(finish_time);
+			break_time = time(break_time);
+			let sum_h = Math.floor(((finish_time - start_time) - break_time)/60);
+			let sum_m = ((finish_time - start_time) - break_time)%60;
+			let sum_time = zero(sum_h,sum_m,finish_time,start_time);
+			$("#staff_data"+i+"_4").val(sum_time);
+			//総合計と客先+自社の値が異なるときのエラー
+			let sum_check = $("#staff_data"+i+"_4").val();
+			let commpany_check = $("#staff_data"+i+"_9").val();
+			let customr_check = $("#staff_data"+i+"_10").val();
+			if(time(sum_check) == time(commpany_check)+time(customr_check)){
+				$("#staff_data"+i+"_9").css('background-color', 'yellow');
+				$("#staff_data"+i+"_10").css('background-color', 'yellow');
+			}else{
+				$("#staff_data"+i+"_9").css('background-color', 'red');
+				$("#staff_data"+i+"_10").css('background-color', 'red');
+				error_check[i][9] = true;
+				error_check[i][10] = true;
+			}
+		}
+		//総合計の総合計
+		Asum("4","sum_all");
+		//平日・土曜の残業時間の合計(通常)
+		Asum("5","sum_ovt_n");
+		//平日・土曜の残業時間の合計(深夜)
+		Asum("6","sum_ovt_e");
+		//法定休日の残業時間の合計(通常)
+		Asum("7","sum_ovt_h_n");
+		//法定休日の残業時間の合計(深夜)
+		Asum("8","sum_ovt_h_e");
+		//自社の総合計を求める
+		Asum("9","sum_commpany");
+		//客先の総合計を求める
+		Asum("10","sum_customer");
+		//休憩時間の総合計
+		Asum("11","sum_break");
+		//休暇時間の総合計
+		Asum("12","sum_h_time");
+		//遅刻時間の総合計
+		Asum("14","sum_slow");
+		//早退時間の総合計
+		Asum("15","sum_early");
+		//作業一覧の客先時間の合計
+		Asum("10","sum_k_time");
+		//作業一覧の自社時間の合計
+		Asum("9","sum_j_time");
+		//平日・土曜の残業時間の60時間超過と、以下の表示
+		let sum_ov60_n = Asum_r("5");
+		let sum_ov60_e = Asum_r("6");
+		let sum_ov60_n_int = time(sum_ov60_n);
+		let sum_ov60_e_int = time(sum_ov60_e);
+		let sum_ov60_int = sum_ov60_n_int + sum_ov60_e_int;
+		if(sum_ov60_int>3600){
+			$("#sum_ov_60down").text("60:00");
+			let sum_ov60up_h = Math.floor((sum_ov60_int - 3600)/60);
+			let sum_ov60up_m = (sum_ov60_int - 3600)%60;
+			let sum_ov_60up = zero(sum_ov60up_h,sum_ov60up_m,0,0);
+			$("#sum_ov_60up").text(sum_ov_60up);
+		}else{
+			$("#sum_ov_60up").text("00:00");
+			let sum_ov60down_h = Math.floor((sum_ov60_int)/60);
+			let sum_ov60down_m = (sum_ov60_int)%60;
+			let sum_ov_60down = zero(sum_ov60down_h,sum_ov60down_m,0,0);
+			$("#sum_ov_60down").text(sum_ov_60down);
+		}
+		//法定休日の合計
+		let sum_ov_h_n = Asum_r("7");
+		let sum_ov_h_e = Asum_r("8");
+		let sum_ov_h_n_int = time(sum_ov_h_n);
+		let sum_ov_h_e_int = time(sum_ov_h_e);
+		let sum_ov_h = sum_ov_h_n_int + sum_ov_h_e_int;
+		let sum_ov_h_h = Math.floor((sum_ov_h)/60);
+		let sum_ov_h_m = (sum_ov_h)%60;
+		let sum_ov_h_text = zero(sum_ov_h_h,sum_ov_h_m,0,0);
+		$("#sum_h_all").text(sum_ov_h_text);
+		//時間外作業総時間
+		let sum_ov_all_int = sum_ov60_int + sum_ov_h;
+		let sum_ov_all_h = Math.floor((sum_ov_all_int)/60);
+		let sum_ov_all_m = (sum_ov_all_int)%60;
+		let sum_ov_all = zero(sum_ov_all_h,sum_ov_all_m,0,0);
+		$("#sum_ov_all").text(sum_ov_all);
+		//入力された値が24以上だった場合のエラー
+		error(1);
+		error(2);
+		error(3);
+		error(5);
+		error(6);
+		error(7);
+		error(8);
+		error(9);
+		error(10);
+		error(11);
+		error(12);
+		error(14);
+		error(15);
+//		text_error(1);
+//		text_error(2);
+//		text_error(3);
+//		text_error(5);
+//		text_error(6);
+//		text_error(7);
+//		text_error(8);
+//		text_error(9);
+//		text_error(10);
+//		text_error(11);
+//		text_error(12);
+//		text_error(14);
+//		text_error(15);
+
+	}
+	
+	//総合計を求める
+	function Asum(type,view){
+		let sum_all_save=0;
+		for(i=0;i<calendar_day.length;i++){
+			let sum_all = $("#staff_data"+i+"_"+type).val();
+			let sum_all_int = time(sum_all);
+			sum_all_save += sum_all_int;
+		}
+		let sum_all_h = Math.floor(sum_all_save/60);
+		let sum_all_m = (sum_all_save%60);
+		sum_all_text = zero(sum_all_h,sum_all_m,0,0);
+		$("#"+view).text(sum_all_text);
+	}
+	
+	//総合計を求める(return用)
+	function Asum_r(type){
+		let sum_all_save=0;
+		for(i=0;i<calendar_day.length;i++){
+			let sum_all = $("#staff_data"+i+"_"+type).val();
+			let sum_all_int = time(sum_all);
+			sum_all_save += sum_all_int;
+		}
+		let sum_all_h = Math.floor(sum_all_save/60);
+		let sum_all_m = (sum_all_save%60);
+		sum_all_text = zero(sum_all_h,sum_all_m,0,0);
+		return sum_all_text;
+	}
+	
+	//24以上もしくはマイナスの値の時のエラー
+	function error(type){
+		for(i=0;i<calendar_day.length;i++){
+			let ov_check = $("#staff_data"+i+"_"+type).val();
+			ov_check_int = time(ov_check);
+			if(ov_check_int>1440){
+				$("#staff_data"+i+"_"+type).css('background-color','red');
+				error_check[i][type]=true;
+			}else{
+				if(type==1||type==2||type==9||type==10){
+					if(type==1||type==2){
+						$("#staff_data"+i+"_"+type).css('background-color','yellow');
+					}else if(error_check[i][type]!=true){
+						$("#staff_data"+i+"_"+type).css('background-color','yellow');
+					}
+				}else{
+					$("#staff_data"+i+"_"+type).css('background-color','white');
+				}
+			}
+		}
+	}
+	
+	//書き方がおかしい時のエラー
+//	function text_error(type){
+//		let text_check_error_left = false;
+//		let text_check_error_right = false;
+//		for(i=0;i<calendar_day.length;i++){
+//			let text = $("#staff_data"+i+"_"+type).val();
+//			let text_left = text.slice(0,2);
+//			let text_center = text.slice(2,3);
+//			let text_right = text.slice(3,5);
+//			if(text_center!=":"){
+//				$("#staff_data"+i+"_"+type).css('background-color','red');
+//				error_check[i][type]=true;
+//			}else{
+//				if(type==1||type==2||type==9||type==10){
+//					if(error_check[i][type]!=true){
+//						$("#staff_data"+i+"_"+type).css('background-color','yellow');
+//					}
+//				}else{
+//					if(error_check[i][type]!=true){
+//						$("#staff_data"+i+"_"+type).css('background-color','white');
+//					}
+//				}
+//			}
+//			for(i=0;i<=24;i++){
+//				if(i.length==1){
+//					let text_check_length = "0"+i;
+//				}else{
+//					let text_check_length = i;
+//				}
+//				if(text_left==text_check_length){
+//					text_check_error_left=true;
+//				}
+//			}
+//			
+//			if(text_check_error_left==false){
+//				$("#staff_data"+i+"_"+type).css('background-color','red');
+//				error_check[i][type]=true;
+//			}
+//			
+//			for(i=0;i<60;i++){
+//				if(i.length==1){
+//					let text_check_length = "0"+i;
+//				}else{
+//					let text_check_length = i;
+//				}
+//				if(text_right==text_check_length){
+//					text_check_error_right=true;
+//				}
+//			}
+//			if(text_check_error_right==false){
+//				$("#staff_data"+i+"_"+type).css('background-color','red');
+//				error_check[i][type]=true;
+//			}
+//			
+//		}
+//	}
+	
+</script>
+
+</html>
+

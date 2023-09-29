@@ -1,0 +1,225 @@
+
+#gamen{	
+}
+
+/* 社員管理画面のタイトル */
+h1{
+  text-align: center;
+  font-size: 80px;
+}
+
+
+/* 社員番号の文字 */
+.syainb{
+  position: absolute;
+  right: 40%;
+  bottom: 66%;
+  font-size: 25px;
+}
+
+/* 社員番号選択リスト */
+select[name="syainnumber"] {
+  position: absolute;
+  right: 30%;
+  bottom: 70%;
+  font-size: 20px;
+  width: 140px;
+  height: 30px;
+}
+
+
+/* 勤務先IDの文字 */
+.kinmusaki{
+  position: absolute;
+  right: 20%;
+  bottom: 66%;
+  font-size: 25px;
+}
+
+/* 勤務先IDリスト */
+select[name="kinmu"] {
+  position: absolute;
+  right: 10%;
+  bottom: 70%;
+  font-size: 20px;
+  width: 140px;
+  height: 30px;
+}
+
+
+/* 契約形態の文字 */
+.kei{
+  position: absolute;
+  right: 40%;
+  bottom: 59%;
+  font-size: 25px;
+}
+
+/* 契約形態リスト */
+select[name="keiyaku"] {
+  position: absolute;
+  right: 30%;
+  bottom: 63%;
+  font-size: 20px;
+  width: 140px;
+  height: 30px;
+}
+
+
+/* 始業時間 */
+.starttime{
+  position: absolute;
+  right: 30%;
+  bottom: 56%;
+  font-size: 25px;
+}
+
+/* 終業時間 */
+.closingtime{
+  position: absolute;
+  right: 10%;
+  bottom: 56%;
+  font-size: 25px;
+}
+
+/* 勤務時間 */
+.workgtime{
+  position: absolute;
+  right: 30%;
+  bottom: 49%;
+  font-size: 25px;
+}
+
+/* 残業開始時間 */
+.overtime{
+  position: absolute;
+  right: 10%;
+  bottom: 49%;
+  font-size: 25px;
+}
+
+/* 交通費 */
+.tmoney{
+  position: absolute;
+  right: 30%;
+  bottom: 42%;
+  font-size: 25px;
+}
+
+/* 備考 */
+.biko{
+  position: absolute;
+  right: 23.5%;
+  bottom: 30%;
+  font-size: 25px;
+}
+
+/* 削除済みのみ表示の文字 */
+.delete-flag1{
+    display: block;
+  }
+ 
+/* 削除フラグの文字 */
+.delete-flag2{
+    display: block;
+  }
+  
+/* チェックボックス全部 */  
+input[type="checkbox"] {
+    margin-left: 40px;
+    transform: scale(1.0);
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+  }
+
+/* 削除済みのみ表示の位置 */  
+.flag1 {
+  position: absolute;
+  left: 0.5%;
+  bottom: 22.5%;
+}
+
+/* 削除フラグの位置 */ 
+.flag2 {
+  position: absolute;
+  right: 35%;
+  bottom: 20%;
+  border: 5px solid gray;
+  background-color: lightgray;
+}
+
+
+/* ボタン全部に影響 */
+button {
+  width: 10em;
+  height:4em;
+  margin:15px;
+}
+
+/* 戻るボタン */
+.botan1 {
+  position: absolute;
+  left: 3%;
+  bottom: 5%;
+}
+
+/* 登録ボタン */
+.botan2 {
+  position: absolute;
+  right: 20%;
+  bottom: 5%;
+  background-color: yellowgreen;
+}
+
+/* 更新ボタン */
+.botan3 {
+  position: absolute;
+  right: 5%;
+  bottom: 5%;
+  background-color: deepskyblue;
+}
+
+/* tテーブル一覧表の位置調整 */
+table{
+  position: absolute;
+  left: 2%;
+  bottom: 30%;
+}
+
+
+/* tテーブルの中の題名の調整 */
+th {
+    background-color: #ddffeb;
+    border-bottom: solid black;
+    border-left: solid black;
+    border-right: solid black;
+    border-top: solid black;
+    border-width: 2px;
+    position: sticky;
+    top: 0;
+    left: 0;
+    text-align: center; 
+    width: 100px;
+    white-space: nowrap;
+    font-size: 18px;
+}
+
+/* tテーブルの入力欄の調整 */
+td {
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    text-align: center;
+    height: 30px;
+}
+
+.listScroll{
+    height: 350px;
+    width: 770px;
+    display: block;
+    overflow-y: scroll;
+    overflow-x: scroll;
+    margin-left: auto;
+    margin-right: auto;
+}

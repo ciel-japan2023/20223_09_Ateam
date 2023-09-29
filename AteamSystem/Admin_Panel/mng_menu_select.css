@@ -1,0 +1,46 @@
+#gamen{
+	text-align: center;
+}
+
+h1{
+  font-size: 80px;
+}
+
+button {
+  width: 10em;
+  height:3em;
+  margin:15px;
+  font-size: 25px;
+}
+
+#botan1 {
+  position: absolute;
+  left: 25%;
+  bottom: 60%;
+
+}
+
+#botan2 {
+  position: absolute;
+  right: 25%;
+  bottom: 60%;
+}
+
+#botan3 {
+  position: absolute;
+  left: 25%;
+  bottom: 40%;
+}
+
+#botan4 {
+  position: absolute;
+  right: 25%;
+  bottom: 40%;
+}
+
+#botan5 {
+  position: absolute;
+  left: 5%;
+  bottom: 10%;
+}
+

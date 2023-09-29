@@ -1,0 +1,132 @@
+
+#gamen{	
+}
+
+/* 社員管理画面のタイトル */
+h1{
+  text-align: center;
+  font-size: 80px;
+}
+
+/* 社員番号 */
+.syain1{
+  position: absolute; /* 絶対位置 */
+  right: 25%;
+  bottom: 70%;
+  font-size: 25px;
+}
+
+/* 社員名 */
+.syain2{
+  position: absolute;
+  right: 25%;
+  bottom: 60%;
+  font-size: 25px;
+}
+
+/* 削除済みのみ表示の文字 */
+.delete-flag1{
+    display: block;
+  }
+ 
+/* 削除フラグの文字 */
+.delete-flag2{
+    display: block;
+  }
+  
+/* チェックボックス全部 */  
+input[type="checkbox"] {
+    margin-left: 40px;
+    transform: scale(1.0);
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+  }
+
+/* 削除済みのみ表示の位置 */  
+.flag1 {
+  position: absolute;
+  left: 10%;
+  bottom: 20%;
+}
+
+/* 削除フラグの位置 */ 
+.flag2 {
+  position: absolute;
+  right: 40%;
+  bottom: 45%;
+  border: 5px solid gray;
+  background-color: lightgray;
+}
+
+
+/* ボタン全部に影響 */
+button {
+  width: 10em;
+  height:4em;
+  margin:15px;
+}
+
+/* 戻るボタン */
+.botan1 {
+  position: absolute;
+  left: 5%;
+  bottom: 5%;
+}
+
+/* 登録ボタン */
+.botan2 {
+  position: absolute;
+  right: 20%;
+  bottom: 5%;
+  background-color: yellowgreen;
+}
+
+/* 更新ボタン */
+.botan3 {
+  position: absolute;
+  right: 5%;
+  bottom: 5%;
+  background-color: deepskyblue;
+}
+
+/* tテーブル一覧表の調整 */
+table{
+  position: absolute;
+  left: 12.5%;
+  bottom: 30%;
+}
+
+
+/* tテーブルの中の題名の調整 */
+th {
+    background-color: #ddffeb;
+    border-bottom: solid black;
+    border-left: solid black;
+    border-right: solid black;
+    border-top: solid black;
+    border-width: 2px;
+    position: sticky;
+    top: 0;
+    left: 0;
+    text-align: center; 
+    width: 150px;
+    height: 50px;
+}
+
+/* tテーブルの入力欄の調整 */
+td {
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    text-align: center;
+    height: 50px;
+}
+
+.listScroll{
+    height: 350px;
+    display: block;
+    overflow-y: scroll;
+    margin-left: auto;
+    margin-right: auto;
+}

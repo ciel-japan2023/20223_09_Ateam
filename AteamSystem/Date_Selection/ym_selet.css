@@ -1,0 +1,72 @@
+/* 年月選択画面全体の大きさ */
+#gamen {
+  width: 1400px;
+  height: 700px;
+  margin: auto;
+  background-color: #EEFFFF;  
+}
+
+/* 年月選択画面のタイトル */
+h1{
+	text-align:center;
+	margin:30px;
+	padding:20px;
+	font-size: 50px;
+}
+
+/* 年の文字 */
+.ym1{
+  position: absolute;
+  left: 28%;
+  bottom: 40%;
+  font-size:25px;
+}
+
+/* 月の文字 */
+.ym2{
+  position: absolute;
+  left: 55%;
+  bottom: 40%;
+  font-size:25px;
+}
+
+/* 年のプルダウン */
+select[name="year"] {
+  position: absolute; /* 絶対的な位置を指定 */
+  top: 50%; /* 親要素の上端から50%の位置 */
+  left: 30%; /* 親要素の左端から25%の位置 */
+    width: 10em;
+    height: 3em;
+  font-size:20px;
+}
+
+/* 月のプルダウン */
+select[name="month"] {
+  position: absolute; /* 絶対的な位置を指定 */
+  top: 50%; /* 親要素の上端から50%の位置 */
+  right: 30%; /* 親要素の右端から25%の位置 */
+    width: 10em;
+    height: 3em;
+  font-size:20px;
+}
+
+/* ボタン全部の大きさ */
+button {
+    width: 10em;
+    height: 3em;
+    font-size:20px;
+  }
+
+/* 戻るボタンの位置 */
+#botan1 {
+  position: absolute;
+  left: 15%;
+  bottom: 10%;
+}
+
+/* OKボタンの位置 */
+#botan2 {
+  position: absolute;
+  right: 15%;
+  bottom: 10%;
+}
