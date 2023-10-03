@@ -1,6 +1,9 @@
 SP：Office356などのクラウドサービスのこと
 IdP：クラウドサービスなどにアクセスするユーザーの認証情報を保存、管理するサービスのこと
 
+【SAMLやその他用語の説明】
+https://qiita.com/sibakenY/items/113ef1439aaaa1e86184
+
 【ラインワークスのユーザーをIDとしてSSOを自サービスへ組み込む開発機能の検証事例】
 https://qiita.com/mmclsntr/items/97fd40575e2e98715ebb
 
