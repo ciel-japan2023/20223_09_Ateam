@@ -1,0 +1,52 @@
+SP：Office356などのクラウドサービスのこと
+IdP：クラウドサービスなどにアクセスするユーザーの認証情報を保存、管理するサービスのこと
+
+【ラインワークスのユーザーをIDとしてSSOを自サービスへ組み込む開発機能の検証事例】
+https://qiita.com/mmclsntr/items/97fd40575e2e98715ebb
+
+①ラインワークスにSP情報を登録
+②SAMLTEST（SAMLの検証に使えるアプリ？）にIdP情報（ラインワークスの情報）を登録
+③ログイン
+
+以上の流れで検証を行っているページ。
+
+【SPと連携するためのLINEWORKSのドキュメントURL】
+※前提として、フリープランでは権限が足りない？（Developer Console＞SAML Appsメニューに行くことができない）
+https://developers.worksmobile.com/jp/docs/sso-idp-register
+
+◇SP情報の登録の流れ
+
+①Developer Consoleに登録
+②LINEWORKS　Identity Provider 情報の確認
+　証明書の更新
+③Service Providerの有効化
+④SAML Responseの確認
+
+上記の流れでIdPとして使うための説明が記載されている。
+
+◇ラインワークス側で必要な処理
+・SP情報の入力（ACS URLおよびSP Issuer(Entity Id)が必要
+・SP情報を登録すると、Identity Provider 情報（以後IP情報と呼ぶ）を閲覧できる
+・証明書の更新
+・SPの有効化
+
+◇SP側で必要な処理
+・IP情報及び、証明書を登録する
+・SP Issuer(Entity Id)の設定
+・ACS URLの設定
+
+※SP Issuer とACS URLとは
+「ACS URL」
+認証済みユーザーのログイン後のリダイレクト先のURL？　下記に参考URL
+https://support.google.com/a/answer/6330801?hl=ja#:~:text=%E3%82%A2%E3%82%B5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%20%E3%82%B3%E3%83%B3%E3%82%B7%E3%83%A5%E3%83%BC%E3%83%9E%20%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9%EF%BC%88ACS%EF%BC%89%E3%81%AE,IdP%20%E3%81%AB%E4%BC%9D%E3%81%88%E3%82%8B%E3%82%82%E3%81%AE%E3%81%A7%E3%81%99%E3%80%82
+
+「IP Issuer（Entity ID）」
+SPを一意に識別するためのID？　下記に参考URL
+https://product.iim.co.jp/dynatips/005
+
+例えば、以下画像のように特定のHostを表示すると、
+URLはグレー枠内のようになります。
+URL内の「id=」以降の黄線部がEntityIDです。
+https://product.iim.co.jp/hs-fs/hubfs/%2306-EntityID-1.png?width=789&name=%2306-EntityID-1.png
+
+
