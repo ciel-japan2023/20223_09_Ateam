@@ -2,6 +2,8 @@
 header("Content-type: text/plain; charset=UTF-8");
 
 try{
+	console.log("データベース接続成功");
+
 	// 接続
 	$db = new PDO('mysql:host=localhost;dbname=company_money_maneger', 'root', 'tkgn1250');
 
